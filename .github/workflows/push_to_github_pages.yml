@@ -1,0 +1,54 @@
+# This is a basic workflow to help you get started with Actions
+
+name: DEPLOY CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [master]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Setup GIT
+        run: |
+          git config --global user.email "blog.zxw7606@github_actions.com"
+          git config --global user.name "blog.zxw7606@bot"
+      - name: CREATE SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.PK }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: GENE
+        run: |
+          npm install yarn -g
+          yarn install 
+          yarn build
+      - name: DEPLOY_TO_GITHUB_PAGES
+        run: |
+          cd ./public
+          git init
+          git remote add "origin" "git@github.com:zxw7606/tools_excalidraw.git"
+          git checkout -b master 
+          git add .
+          git commit -m "Site deployed by GitHub Actions"
+          git push -u --force origin master:master
+          echo "done."
