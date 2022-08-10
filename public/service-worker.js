@@ -29,10 +29,13 @@ if (IS_DEVELOPMENT) {
     debug: true,
   });
 } else {
-  importScripts("/workbox/workbox-sw.js");
-  workbox.setConfig({
-    modulePathPrefix: "/workbox/",
-  });
+  importScripts(
+    "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js",
+  );
+  // importScripts("/workbox/workbox-sw.js");
+  // workbox.setConfig({
+  //   modulePathPrefix: "/workbox/",
+  // });
 }
 
 self.addEventListener("message", (event) => {
