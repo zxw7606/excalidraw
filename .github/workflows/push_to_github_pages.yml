@@ -44,7 +44,7 @@ jobs:
           yarn build
       - name: DEPLOY_TO_GITHUB_PAGES
         run: |
-          cd ./public
+          cd ./build
           git init
           git remote add "origin" "git@github.com:zxw7606/tools_excalidraw.git"
           git checkout -b master 
