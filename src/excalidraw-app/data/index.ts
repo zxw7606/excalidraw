@@ -70,7 +70,7 @@ export const getCollabServer = async (): Promise<{
   if (process.env.REACT_APP_WS_SERVER_URL) {
     return {
       url: process.env.REACT_APP_WS_SERVER_URL,
-      polling: true,
+      polling: false,
     };
   }
 
